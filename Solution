@@ -1,0 +1,65 @@
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            return null;
+        }
+        
+        ListNode slow = head;
+        ListNode fast = head;
+        boolean hasCycle = false;
+        
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            
+            if (slow == fast) {
+                hasCycle = true;
+                break;
+            }
+        }
+        
+        if (!hasCycle) {
+            return null;
+        }
+        
+        // Find the starting node of the cycle
+        ListNode p1 = head;
+        ListNode p2 = slow;
+        
+        while (p1 != p2) {
+            p1 = p1.next;
+            p2 = p2.next;
+        }
+        
+        return p1;
+    }
+    
+    public static void main(String[] args) {
+        // Example usage:
+        Solution solution = new Solution();
+        
+        // Create a linked list with a cycle
+        ListNode head = new ListNode(3);
+        head.next = new ListNode(2);
+        head.next.next = new ListNode(0);
+        head.next.next.next = new ListNode(-4);
+        head.next.next.next.next = head.next; // Cycle from -4 to 2
+        
+        ListNode cycleStart = solution.detectCycle(head);
+        if (cycleStart != null) {
+            System.out.println("Cycle starts at node with value: " + cycleStart.val);
+        } else {
+            System.out.println("No cycle detected.");
+        }
+    }
+}
+
+// Definition of ListNode class
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int x) {
+        val = x;
+        next = null;
+    }
+}
